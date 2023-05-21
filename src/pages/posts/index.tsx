@@ -41,11 +41,11 @@ const PostsList = () => {
           return (
             <div className="text-white" key={post?.id}>
               {post?.content}
-              <Link href={`/user/${post?.author?.name}`}>
+              <Link href={`/user/${post?.author?.name || ""}`}>
                 {post?.author?.name}
               </Link>
               <Image
-                src={post?.author.image}
+                src={post?.author?.image || "/default-image.jpg"}
                 alt="author image"
                 width={50}
                 height={50}
