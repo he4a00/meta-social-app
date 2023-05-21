@@ -8,8 +8,9 @@ import { api } from "y/utils/api";
 const UserProfile: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
+  const name = Array.isArray(id) ? id[0] : id;
   const { data: userProfile } = api.users.getUserByName.useQuery({
-    name: id || "",
+    name: name || "",
   });
   return (
     <>
