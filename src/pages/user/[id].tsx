@@ -9,7 +9,7 @@ const UserProfile: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   const { data: userProfile } = api.users.getUserByName.useQuery({
-    name: id,
+    name: id || "",
   });
   return (
     <>
@@ -21,7 +21,7 @@ const UserProfile: NextPage = () => {
       <div>
         {userProfile?.name}
         <Image
-          src={userProfile?.image}
+          src={userProfile?.image || ""}
           alt="author image"
           width={50}
           height={50}
