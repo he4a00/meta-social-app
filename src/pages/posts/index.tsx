@@ -44,16 +44,24 @@ const PostsList: NextPage = () => {
           data?.map((post) => {
             return (
               <div className="text-white" key={post?.id}>
-                {post?.content}
-                <Link href={`/user/${post?.author?.name || ""}`}>
-                  {post?.author?.name}
-                </Link>
-                <Image
-                  src={post?.author?.image || "/default-image.jpg"}
-                  alt="author image"
-                  width={50}
-                  height={50}
-                />
+                <div className="flex items-center justify-center">
+                  <Image
+                    className="rounded-full"
+                    src={post?.author?.image || "/default-image.jpg"}
+                    alt="author image"
+                    width={50}
+                    height={50}
+                  />
+                  <Link
+                    className="m-3"
+                    href={`/user/${post?.author?.name || ""}`}
+                  >
+                    {post?.author?.name}
+                  </Link>
+                </div>
+                <div className="m-6 font-bold">
+                  Post Content: {post?.content}
+                </div>
               </div>
             );
           })}
