@@ -1,66 +1,45 @@
-import Image from "next/image";
-import Link from "next/link";
-import React, { useState } from "react";
 import { api } from "y/utils/api";
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
+import PostInput from "y/components/PostInput";
+import Image from "next/image";
+import Link from "next/link";
 
 const PostsList: NextPage = () => {
   const { data: sessionData } = useSession();
-
   const { data } = api.posts.getAllPosts.useQuery();
-  const [postContent, setPostContent] = useState("");
-  const ctx = api.useContext();
-  const { mutate } = api.posts.createPost.useMutation({
-    onSuccess: () => {
-      setPostContent("");
-      void ctx.posts.getAllPosts.invalidate();
-    },
-    onError: (e) => {
-      const errorMessage = e.data?.zodError?.fieldErrors.content;
-      if (errorMessage && errorMessage[0]) {
-        alert(errorMessage);
-      }
-    },
-  });
 
   return (
     <>
       <div>
-        <input
-          value={postContent}
-          onChange={(e) => setPostContent(e.target.value)}
-          type="text"
-        />
-        <button
-          className=" m-4 rounded bg-white p-4"
-          onClick={() => mutate({ content: postContent })}
-        >
-          Post
+        <button onClick={() => void signOut()} className="text-white">
+          Log Out
         </button>
+        <PostInput />
       </div>
-      <div>
+      <div className="w-[38.4rem] border">
         {sessionData &&
           data?.map((post) => {
             return (
               <div className="text-white" key={post?.id}>
-                <div className="flex items-center justify-center">
+                <div className="m-5 flex  items-center border-b-2 p-5">
                   <Image
-                    className="rounded-full"
-                    src={post?.author?.image || "/default-image.jpg"}
-                    alt="author image"
+                    alt="author Image"
+                    src={post?.author?.image || ""}
                     width={50}
                     height={50}
+                    className="mr-1 rounded-full"
                   />
-                  <Link
-                    className="m-3"
-                    href={`/user/${post?.author?.name || ""}`}
-                  >
-                    {post?.author?.name}
-                  </Link>
-                </div>
-                <div className="m-6 font-bold">
-                  Post Content: {post?.content}
+
+                  <div className="ml-3">
+                    <Link
+                      href={`/users/${post.author.name || ""}`}
+                      className="font-bold"
+                    >
+                      {post?.author.name}
+                    </Link>
+                    <p>{post?.content}</p>
+                  </div>
                 </div>
               </div>
             );
